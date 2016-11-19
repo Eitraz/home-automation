@@ -1,0 +1,707 @@
+{
+  "listeners": [
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.111.temp",
+      "key": "temp",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "111"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.111.humidity",
+      "key": "humidity",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "111"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.112.temp",
+      "key": "temp",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "112"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.112.humidity",
+      "key": "humidity",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "112"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.113.temp",
+      "key": "temp",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "113"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.113.humidity",
+      "key": "humidity",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "113"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.114.temp",
+      "key": "temp",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "114"
+      }
+    },
+    {
+      "class": "com.eitraz.homeautomation.SensorToGraphiteListener",
+      "category": "sensor.114.humidity",
+      "key": "humidity",
+      "protocol": "mandolyn",
+      "model": "temperaturehumidity",
+      "parameters": {
+        "id": "114"
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "name": "Weekday",
+      "class": "com.eitraz.automation.condition.impl.DayCondition",
+      "days": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "Morning",
+      "class": "com.eitraz.automation.condition.impl.TimeCondition",
+      "start": "06:30",
+      "end": "10:00"
+    },
+    {
+      "name": "Evening",
+      "class": "com.eitraz.automation.condition.impl.TimeCondition",
+      "start": "14:00",
+      "end": "23:00"
+    },
+    {
+      "name": "Late",
+      "class": "com.eitraz.automation.condition.impl.TimeCondition",
+      "start": "14:00",
+      "end": "23:59"
+    },
+    {
+      "name": "Morning or Evening",
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "condition": "Morning"
+        },
+        {
+          "condition": "Evening"
+        }
+      ]
+    },
+    {
+      "name": "Morning or Late",
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "condition": "Morning"
+        },
+        {
+          "condition": "Late"
+        }
+      ]
+    },
+    {
+      "name": "Always on",
+      "class": "com.eitraz.automation.condition.impl.TimeCondition",
+      "start": "17:00",
+      "end": "22:00"
+    },
+    {
+      "name": "Advent-Mars",
+      "class": "com.eitraz.automation.condition.impl.DateCondition",
+      "start": "2013-11-29",
+      "end": "2014-03-31"
+    },
+    {
+      "name": "Computers/TV on",
+      "class": "com.eitraz.automation.condition.impl.PingTimeoutCondition",
+      "timeout": 600000,
+      "ips": [
+        "192.168.1.19",
+        "192.168.1.51",
+        "192.168.1.52"
+      ]
+    },
+    {
+      "name": "Sunset",
+      "class": "com.eitraz.automation.condition.sunset.SunsetCondition",
+      "latitude": 58.03717,
+      "longitude": 14.9782,
+      "sunriseOffset": 1800000,
+      "sunsetOffset": -4600000
+    },
+    {
+      "name": "Livingroom sensor",
+      "class": "com.eitraz.tellstick.automation.condition.RawBellDeviceCondition",
+      "timeout": 3600000,
+      "protocol": "arctech",
+      "model": "codeswitch",
+      "parameters": {
+        "house": "E"
+      }
+    },
+    {
+      "name": "Entrance sensor",
+      "class": "com.eitraz.tellstick.automation.condition.RawBellDeviceCondition",
+      "timeout": 3600000,
+      "protocol": "arctech",
+      "model": "codeswitch",
+      "parameters": {
+        "house": "M"
+      }
+    },
+    {
+      "name": "Kitchen sensor",
+      "class": "com.eitraz.tellstick.automation.condition.RawBellDeviceCondition",
+      "timeout": 3600000,
+      "protocol": "arctech",
+      "model": "selflearning",
+      "parameters": {
+        "house": "8040222",
+        "unit": "10",
+        "method": "turnon"
+      }
+    },
+    {
+      "name": "Upstairs hallway sensor",
+      "class": "com.eitraz.tellstick.automation.condition.RawBellDeviceCondition",
+      "timeout": 1800000,
+      "protocol": "arctech",
+      "model": "selflearning",
+      "parameters": {
+        "house": "8090342",
+        "unit": "10",
+        "method": "turnon"
+      }
+    },
+    {
+      "name": "Upstair sensor",
+      "class": "com.eitraz.tellstick.automation.condition.RawBellDeviceCondition",
+      "timeout": 1800000,
+      "protocol": "arctech",
+      "model": "selflearning",
+      "parameters": {
+        "house": "8042158",
+        "unit": "10",
+        "method": "turnon"
+      }
+    }
+  ],
+  "deviceConditions": {
+    "1": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Morning or Evening"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Entrance sensor"
+                },
+                {
+                  "condition": "Livingroom sensor"
+                },
+                {
+                  "condition": "Kitchen sensor"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Sunset"
+            },
+            {
+              "condition": "Computers/TV on"
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Morning or Evening"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Entrance sensor"
+                },
+                {
+                  "condition": "Livingroom sensor"
+                },
+                {
+                  "condition": "Kitchen sensor"
+                },
+                {
+                  "condition": "Always on"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Sunset"
+            },
+            {
+              "condition": "Computers/TV on"
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "class": "com.eitraz.automation.condition.logic.And",
+      "conditions": [
+        {
+          "condition": "Morning or Evening"
+        },
+        {
+          "condition": "Sunset"
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "condition": "Computers/TV on"
+            },
+            {
+              "condition": "Entrance sensor"
+            },
+            {
+              "condition": "Livingroom sensor"
+            },
+            {
+              "condition": "Kitchen sensor"
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Morning or Evening"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Entrance sensor"
+                },
+                {
+                  "condition": "Livingroom sensor"
+                },
+                {
+                  "condition": "Kitchen sensor"
+                },
+                {
+                  "condition": "Upstair sensor"
+                },
+                {
+                  "condition": "Always on"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Sunset"
+            },
+            {
+              "condition": "Computers/TV on"
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Morning or Late"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Entrance sensor"
+                },
+                {
+                  "condition": "Upstair sensor"
+                },
+                {
+                  "condition": "Upstairs hallway sensor"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Morning"
+                },
+                {
+                  "class": "com.eitraz.automation.condition.impl.TimeCondition",
+                  "start": "14:00",
+                  "end": "21:00"
+                }
+              ]
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Upstair sensor"
+                },
+                {
+                  "condition": "Upstairs hallway sensor"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "7": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "14:00",
+              "end": "22:00"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Upstair sensor"
+                },
+                {
+                  "condition": "Upstairs hallway sensor"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "08:00",
+              "end": "10:00"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Upstair sensor"
+                },
+                {
+                  "condition": "Upstairs hallway sensor"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "06:30",
+              "end": "08:00"
+            },
+            {
+              "condition": "Weekday"
+            },
+            {
+              "condition": "Sunset"
+            }
+          ]
+        }
+      ]
+    },
+    "8": {
+      "class": "com.eitraz.automation.condition.logic.And",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "06:30",
+              "end": "10:00"
+            },
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "14:00",
+              "end": "21:00"
+            }
+          ]
+        },
+        {
+          "condition": "Sunset"
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "condition": "Entrance sensor"
+            },
+            {
+              "condition": "Kitchen sensor"
+            }
+          ]
+        }
+      ]
+    },
+    "9": {
+      "class": "com.eitraz.automation.condition.logic.And",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "07:00",
+              "end": "10:00"
+            },
+            {
+              "class": "com.eitraz.automation.condition.impl.TimeCondition",
+              "start": "14:00",
+              "end": "18:30"
+            }
+          ]
+        },
+        {
+          "condition": "Sunset"
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "condition": "Upstair sensor"
+            },
+            {
+              "condition": "Upstairs hallway sensor"
+            }
+          ]
+        }
+      ]
+    },
+    "10": {
+      "class": "com.eitraz.automation.condition.logic.And",
+      "conditions": [
+        {
+          "condition": "Morning or Evening"
+        },
+        {
+          "condition": "Sunset"
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.Or",
+          "conditions": [
+            {
+              "condition": "Computers/TV on"
+            },
+            {
+              "condition": "Livingroom sensor"
+            },
+            {
+              "condition": "Kitchen sensor"
+            }
+          ]
+        }
+      ]
+    },
+    "11": {
+      "class": "com.eitraz.automation.condition.logic.Or",
+      "conditions": [
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Morning or Evening"
+            },
+            {
+              "condition": "Sunset"
+            },
+            {
+              "class": "com.eitraz.automation.condition.logic.Or",
+              "conditions": [
+                {
+                  "condition": "Entrance sensor"
+                },
+                {
+                  "condition": "Livingroom sensor"
+                },
+                {
+                  "condition": "Kitchen sensor"
+                },
+                {
+                  "condition": "Always on"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "com.eitraz.automation.condition.logic.And",
+          "conditions": [
+            {
+              "condition": "Sunset"
+            },
+            {
+              "condition": "Computers/TV on"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "events": {
+    "Good night": [
+      {
+        "startTime": 0,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": true,
+        "device": 5,
+        "timeout": 600000
+      },
+      {
+        "startTime": 600000,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": false,
+        "device": 5,
+        "timeout": 10800000
+      },
+      {
+        "startTime": 300000,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": false,
+        "device": 1,
+        "timeout": 10800000
+      },
+      {
+        "startTime": 300000,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": false,
+        "device": 6,
+        "timeout": 10800000
+      },
+      {
+        "startTime": 300000,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": false,
+        "device": 7,
+        "timeout": 10800000
+      },
+      {
+        "startTime": 300000,
+        "class": "com.eitraz.tellstick.automation.event.SetOnOffDeviceEvent",
+        "on": false,
+        "device": 10,
+        "timeout": 10800000
+      }
+    ]
+  }
+}
+
