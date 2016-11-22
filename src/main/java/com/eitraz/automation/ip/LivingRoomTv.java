@@ -1,4 +1,11 @@
 package com.eitraz.automation.ip;
 
-public class LivingRoomTv {
+import org.springframework.stereotype.Component;
+
+@Component
+public class LivingRoomTv extends NetworkDevice {
+
+    public LivingRoomTv() {
+        super("192.168.1.19");
+    }
 }

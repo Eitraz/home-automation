@@ -9,12 +9,24 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class GroundFloor1 {
+public class MainFloorGroup1 {
     private final List<TellstickHazelcastClusterDevice> devices;
 
     @Autowired
-    public GroundFloor1(EntranceWindow entranceWindow, GuestRoomWindow guestRoomWindow, KitchenWindow kitchenWindow,
-                        LivingRoomWindow livingRoomWindow, OfficeWindow officeWindow, Garden garden) {
+    public MainFloorGroup1(EntranceWindow entranceWindow,
+                           GuestRoomWindow guestRoomWindow,
+                           KitchenWindow kitchenWindow,
+                           LivingRoomWindow livingRoomWindow,
+                           OfficeWindow officeWindow,
+                           Garden garden) {
         devices = Arrays.asList(entranceWindow, guestRoomWindow, kitchenWindow, livingRoomWindow, officeWindow, garden);
+    }
+
+    public void on() {
+        devices.forEach(TellstickHazelcastClusterDevice::on);
+    }
+
+    public void off() {
+        devices.forEach(TellstickHazelcastClusterDevice::off);
     }
 }
