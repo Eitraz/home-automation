@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class RemoteController1 extends AbstractRawDevice {
+public class RemoteController2 extends AbstractRawDevice {
     @Override
     protected boolean matches(RawDeviceEvent event) {
         throw new UnsupportedOperationException("Not implemented");

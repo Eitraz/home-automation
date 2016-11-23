@@ -4,7 +4,7 @@ import com.eitraz.tellstick.core.rawdevice.events.RawDeviceEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EntranceMotionSensor extends AbstractRawDevice {
+public class EntranceMotionSensor extends AbstractMotionSensor {
     @Override
     protected boolean matches(RawDeviceEvent event) {
         return "arctech".equals(event.getProtocol()) &&
