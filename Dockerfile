@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 # Maven and GIT
-RUN apt-get update && apt-get install -y software-properties-common maven git
+RUN apt-get update && apt-get install -y software-properties-common supervisor maven git
 
 # Install Java
 RUN \
