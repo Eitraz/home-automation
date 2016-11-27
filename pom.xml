@@ -61,7 +61,7 @@
         <dependency>
             <groupId>com.github.eitraz</groupId>
             <artifactId>tellstick-hazelcast-cluster</artifactId>
-            <version>1.4</version>
+            <version>1.6</version>
         </dependency>
 
         <!-- Dark Sky -->

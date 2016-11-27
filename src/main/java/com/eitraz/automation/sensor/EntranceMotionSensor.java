@@ -11,7 +11,7 @@ public class EntranceMotionSensor extends AbstractMotionSensor {
                 "selflearning".equals(event.getModel()) &&
                 "20782302".equals(event.get("house")) &&
                 "10".equals(event.get("unit")) &&
-                "00".equals(event.get("group")) &&
+                "0".equals(event.get("group")) &&
                 "turnon".equals(event.get("method"));
     }
 }

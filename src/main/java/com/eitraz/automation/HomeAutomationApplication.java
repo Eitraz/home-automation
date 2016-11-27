@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 
+import java.time.Duration;
 import java.util.Collections;
 
 @SpringBootApplication
@@ -42,7 +43,7 @@ public class HomeAutomationApplication implements CommandLineRunner {
     @Bean(name = "tellstickHazelcastCluster")
     @Autowired
     public TellstickHazelcastCluster tellstickHazelcastCluster(HazelcastInstance hazelcast) {
-        TellstickHazelcastCluster tellstick = new TellstickHazelcastCluster(hazelcast);
+        TellstickHazelcastCluster tellstick = new TellstickHazelcastCluster(hazelcast, Duration.ofSeconds(2));
 
         // Hand over raw events to Spring
         tellstick.addRawDeviceEventListener(publisher::publishEvent);
