@@ -10,14 +10,14 @@ import java.util.Optional;
 public class RemoteController1 extends AbstractRawDevice {
     @Override
     protected boolean matches(RawDeviceEvent event) {
-        throw new UnsupportedOperationException("Not implemented");
+        return false;
     }
 
     public Optional<Boolean> isOn() {
-        throw new UnsupportedOperationException("Not implemented");
+        return Optional.empty();
     }
 
     public Optional<Boolean> isOff() {
-        throw new UnsupportedOperationException("Not implemented");
+        return Optional.empty();
     }
 }

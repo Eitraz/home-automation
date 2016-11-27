@@ -10,6 +10,7 @@ public class UpstairsHallwayMotionSensor extends AbstractMotionSensor {
         return "arctech".equals(event.getProtocol()) &&
                 "selflearning".equals(event.getModel()) &&
                 "8090342".equals(event.get("house")) &&
+                "0".equals(event.get("group")) &&
                 "10".equals(event.get("unit")) &&
                 "turnon".equals(event.get("method"));
     }

@@ -9,6 +9,6 @@ public abstract class AbstractMotionSensor extends AbstractRawDevice {
     }
 
     public boolean isActive(Duration timeout) {
-        return getLastEventTime().plus(timeout).isAfter(LocalDateTime.now());
+        return getLastEventTime() != null && getLastEventTime().plus(timeout).isAfter(LocalDateTime.now());
     }
 }

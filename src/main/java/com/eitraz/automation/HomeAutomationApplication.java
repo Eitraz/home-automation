@@ -1,6 +1,11 @@
 package com.eitraz.automation;
 
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastCluster;
+import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterNode;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.ManagementCenterConfig;
+import com.hazelcast.config.MulticastConfig;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +14,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Collections;
 
 @SpringBootApplication
 public class HomeAutomationApplication implements CommandLineRunner {
@@ -21,7 +28,15 @@ public class HomeAutomationApplication implements CommandLineRunner {
 
     @Bean(name = "hazelcast")
     public HazelcastInstance hazelcast() {
-        return Hazelcast.newHazelcastInstance();
+        Config config = new Config();
+        config.setProperty("hazelcast.local.localAddress", System.getProperty("ip"));
+
+        NetworkConfig networkConfig = config.getNetworkConfig();
+        networkConfig.setPublicAddress(System.getProperty("ip"));
+        networkConfig.setPort(5702);
+        networkConfig.setPortAutoIncrement(false);
+
+        return Hazelcast.newHazelcastInstance(config);
     }
 
     @Bean(name = "tellstickHazelcastCluster")
@@ -41,6 +56,10 @@ public class HomeAutomationApplication implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
+        // TODO: Remove
+        System.setProperty("darksky.apiKey", "8fc2bca342596e1a7d9470fbdfd0583f");
+
+        TellstickHazelcastClusterNode.setSystemIpProperty();
         SpringApplication.run(HomeAutomationApplication.class, args);
     }
 }
