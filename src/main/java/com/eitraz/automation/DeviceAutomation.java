@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -107,17 +108,15 @@ public class DeviceAutomation {
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
                         || timeIsBetween("10:59", "20:30")
                 )
-                .and(() -> upstairsMotionSensor.isActive() ||
-                        upstairsHallwayMotionSensor.isActive()
+                .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
+                        upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
                 .then(isOn -> {
                     setOn(UpstairsHallway.class, isOn);
                 });
 
         // Kids room
-        decision(() -> remote2ForceOn)
-                .or(() -> !remote2ForceOff)
-                .and(() -> forecast.sunIsDown())
+        decision(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("08:30", "11:01") || timeIsBetween("10:59", "18:00"))
                 .and(() -> upstairsMotionSensor.isActive() ||
                         upstairsHallwayMotionSensor.isActive()
@@ -147,8 +146,8 @@ public class DeviceAutomation {
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
                         || timeIsBetween("10:59", "22:00")
                 )
-                .and(() -> upstairsMotionSensor.isActive() ||
-                        upstairsHallwayMotionSensor.isActive() ||
+                .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(30)) ||
+                        upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(30)) ||
                         (timeIsBetween("06:30", "08:00") && LocalDate.now().getDayOfWeek().getValue() < 6)
                 )
                 .then(isOn -> {

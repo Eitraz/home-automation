@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public abstract class AbstractMotionSensor extends AbstractRawDevice {
     public boolean isActive() {
-        return isActive(Duration.ofMinutes(30));
+        return isActive(Duration.ofMinutes(60));
     }
 
     public boolean isActive(Duration timeout) {

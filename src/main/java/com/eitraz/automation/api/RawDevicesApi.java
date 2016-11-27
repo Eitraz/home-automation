@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class RawDevicesApi {
                     RawDeviceEvent event = device.getLastEvent();
                     row.put("type", event.getClass());
                     row.put("parameters", event.getParameters().toString());
-                    row.put("lastEventTime", device.getLastEventTime());
+                    row.put("lastEventTime", device.getLastEventTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
                     return row;
                 }).collect(Collectors.toList());
     }
