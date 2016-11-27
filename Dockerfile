@@ -19,4 +19,4 @@ RUN git clone https://github.com/Eitraz/home-automation.git
 COPY docker/build_and_run.sh build_and_run.sh
 RUN chmod +x build_and_run.sh
 
-CMD ["/bin/bash", "build_and_run.sh"]
+CMD ["/bin/bash", "build_and_run.sh", "${ip}"]
