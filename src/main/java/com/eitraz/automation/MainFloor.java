@@ -114,16 +114,16 @@ public class MainFloor {
                 });
 
         // Kids room
-//        decision(() -> remote2ForceOn)
-//                .or(() -> !remote2ForceOff)
-//                .and(() -> forecast.sunIsDown())
-//                .and(() -> timeIsBetween("10:59", "18:00"))
-//                .and(() -> upstairsMotionSensor.isActive() ||
-//                        upstairsHallwayMotionSensor.isActive()
-//                )
-//                .then(isOn -> {
-//                    setOn(KidsRoomWindow.class, isOn);
-//                });
+        decision(() -> remote2ForceOn)
+                .or(() -> !remote2ForceOff)
+                .and(() -> forecast.sunIsDown())
+                .and(() -> timeIsBetween("10:59", "18:00"))
+                .and(() -> upstairsMotionSensor.isActive() ||
+                        upstairsHallwayMotionSensor.isActive()
+                )
+                .then(isOn -> {
+                    setOn(KidsRoomWindow.class, isOn);
+                });
 
         // Stair window
         decision(() -> remote1ForceOn || remote2ForceOn)
