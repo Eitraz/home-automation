@@ -53,8 +53,8 @@ public class Forecast {
     public boolean sunIsDown() {
         LocalDateTime now = LocalDateTime.now();
         double cloudCover = getCloudCover();
-        LocalDateTime sunrise = getSunrise().plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(60);
-        LocalDateTime sunset = getSunset().minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(60);
+        LocalDateTime sunrise = getSunrise().plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(45);
+        LocalDateTime sunset = getSunset().minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(45);
 
         return now.isBefore(sunrise) || now.isAfter(sunset);
     }

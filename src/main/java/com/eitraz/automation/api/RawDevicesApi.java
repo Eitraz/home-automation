@@ -40,7 +40,7 @@ public class RawDevicesApi {
                     RawDeviceEvent event = device.getLastEvent();
                     row.put("type", event.getClass());
                     row.put("parameters", event.getParameters().toString());
-                    row.put("lastEventTime", device.getLastEvent());
+                    row.put("lastEventTime", device.getLastEventTime());
                     return row;
                 }).collect(Collectors.toList());
     }
