@@ -2,8 +2,8 @@ package com.eitraz.automation;
 
 import com.eitraz.automation.device.*;
 import com.eitraz.automation.ip.LivingRoomTv;
-import com.eitraz.automation.remote.RemoteController1;
-import com.eitraz.automation.remote.RemoteController2;
+import com.eitraz.automation.remote.RemoteController1Unit1;
+import com.eitraz.automation.remote.RemoteController2Unit2;
 import com.eitraz.automation.sensor.*;
 import com.eitraz.automation.tool.Forecast;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterDevice;
@@ -21,12 +21,12 @@ import static java.time.LocalTime.now;
 
 @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
 @Component
-public class MainFloor {
+public class DeviceAutomation {
     @Autowired
-    private RemoteController1 remoteController1;
+    private RemoteController1Unit1 remoteController1;
 
     @Autowired
-    private RemoteController2 remoteController2;
+    private RemoteController2Unit2 remoteController2Unit2;
 
     @Autowired
     private Forecast forecast;
@@ -58,13 +58,13 @@ public class MainFloor {
     }
 
     private synchronized void update() {
-        final boolean remote1ForceOn = remoteController1.isOn().isPresent();
-        final boolean remote1ForceOff = remoteController1.isOff().isPresent();
+        final boolean remote1ForceOn = remoteController1.isOn().orElse(false);
+        final boolean remote1ForceOff = remoteController1.isOff().orElse(false);
 
         decision(() -> remote1ForceOn)
                 .or(() -> !remote1ForceOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("6:15", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
+                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
                 .and(() -> livingRoomTv.isOn() ||
                         livingRoomMotionSensor.isActive() ||
                         entranceMotionSensor.isActive() ||
@@ -82,7 +82,7 @@ public class MainFloor {
         decision(() -> remote1ForceOn)
                 .or(() -> !remote1ForceOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("6:15", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
+                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
                 .and(() -> livingRoomTv.isOn() ||
                         livingRoomMotionSensor.isActive() ||
                         entranceMotionSensor.isActive() ||
@@ -92,17 +92,18 @@ public class MainFloor {
                     setOn(KitchenWindow.class, isOn);
                     setOn(GuestRoomWindow.class, isOn);
                     setOn(OfficeWindow.class, isOn);
+                    setOn(PlayRoomWindow.class, isOn);
                 });
 
 
-        final boolean remote2ForceOn = remoteController2.isOn().isPresent();
-        final boolean remote2ForceOff = remoteController2.isOff().isPresent();
+        final boolean remote2ForceOn = remoteController2Unit2.isOn().orElse(false);
+        final boolean remote2ForceOff = remoteController2Unit2.isOff().orElse(false);
 
         // Upstairs hallway
         decision(() -> remote2ForceOn)
                 .or(() -> !remote2ForceOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> (timeIsBetween("6:30", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
+                .and(() -> (timeIsBetween("6:45", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
                         || timeIsBetween("10:59", "20:30")
                 )
@@ -117,7 +118,7 @@ public class MainFloor {
         decision(() -> remote2ForceOn)
                 .or(() -> !remote2ForceOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("10:59", "18:00"))
+                .and(() -> timeIsBetween("08:30", "11:01") || timeIsBetween("10:59", "18:00"))
                 .and(() -> upstairsMotionSensor.isActive() ||
                         upstairsHallwayMotionSensor.isActive()
                 )
@@ -129,7 +130,7 @@ public class MainFloor {
         decision(() -> remote1ForceOn || remote2ForceOn)
                 .or(() -> !remote2ForceOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("6:15", "11:01") || timeIsBetween("10:59", "22:30"))
+                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30"))
                 .and(() -> upstairsMotionSensor.isActive() ||
                         upstairsHallwayMotionSensor.isActive() ||
                         entranceMotionSensor.isActive()

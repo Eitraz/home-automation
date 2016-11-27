@@ -24,7 +24,7 @@ public abstract class AbstractRawDevice {
         }
     }
 
-    protected RawDeviceEvent getLastEvent() {
+    public RawDeviceEvent getLastEvent() {
         return lastEvent;
     }
 
