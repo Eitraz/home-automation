@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class OutsideTempSensor extends AbstractTemperatureAndHumiditySensor {
     @Override
     protected boolean idMatches(String id) {
-        return "113".equals(id);
+        return "31".equals(id);
     }
 }
