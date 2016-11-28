@@ -39,7 +39,7 @@ public class RawDevicesApi {
                 .map(device -> {
                     Map<String, Object> row = new LinkedHashMap<>();
                     RawDeviceEvent event = device.getLastEvent();
-                    row.put("type", device.getClass());
+                    row.put("type", device.getClass().getSimpleName());
                     row.put("parameters", event.getParameters().toString());
                     row.put("lastEventTime", device.getLastEventTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     return row;

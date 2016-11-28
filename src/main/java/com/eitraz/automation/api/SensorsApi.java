@@ -18,7 +18,7 @@ public class SensorsApi {
 
     @EventListener
     public void handleSensorUpdate(AbstractTemperatureAndHumiditySensor sensor) {
-        sensorValues.put(sensor.getClass().getCanonicalName(), new HashMap<String, Object>() {
+        sensorValues.put(sensor.getClass().getSimpleName(), new HashMap<String, Object>() {
             {
                 put("time", sensor.getLastEventTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 put("temperature", sensor.getTemperature());
