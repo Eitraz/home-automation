@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public abstract class AbstractRawDevice {
@@ -18,6 +19,10 @@ public abstract class AbstractRawDevice {
     @EventListener
     public void handle(RawDeviceEvent event) {
         if (matches(event)) {
+            // No need to run to often
+            if (lastEventTime != null && lastEventTime.plus(Duration.ofMillis(500)).isAfter(LocalDateTime.now()))
+                return;
+
             lastEvent = event;
             lastEventTime = LocalDateTime.now();
             publisher.publishEvent(this);
