@@ -4,7 +4,7 @@ import com.eitraz.tellstick.core.rawdevice.events.RawDeviceEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RemoteController2Unit2 extends AbstractRemoteController {
+public class RemoteController1Unit2 extends AbstractRemoteController {
     @Override
     protected boolean matches(RawDeviceEvent event) {
         return "arctech".equals(event.getProtocol()) &&

@@ -3,7 +3,7 @@ package com.eitraz.automation;
 import com.eitraz.automation.device.*;
 import com.eitraz.automation.ip.LivingRoomTv;
 import com.eitraz.automation.remote.RemoteController1Unit1;
-import com.eitraz.automation.remote.RemoteController2Unit2;
+import com.eitraz.automation.remote.RemoteController1Unit2;
 import com.eitraz.automation.sensor.*;
 import com.eitraz.automation.tool.Forecast;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterDevice;
@@ -27,7 +27,7 @@ public class DeviceAutomation {
     private RemoteController1Unit1 remoteController1;
 
     @Autowired
-    private RemoteController2Unit2 remoteController2Unit2;
+    private RemoteController1Unit2 remoteController1Unit2;
 
     @Autowired
     private Forecast forecast;
@@ -97,8 +97,8 @@ public class DeviceAutomation {
                 });
 
 
-        final boolean remote2ForceOn = remoteController2Unit2.isOn().orElse(false);
-        final boolean remote2ForceOff = remoteController2Unit2.isOff().orElse(false);
+        final boolean remote2ForceOn = remoteController1Unit2.isOn().orElse(false);
+        final boolean remote2ForceOff = remoteController1Unit2.isOff().orElse(false);
 
         // Upstairs hallway
         decision(() -> remote2ForceOn)
