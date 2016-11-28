@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class HomeAutomationApplication implements CommandLineRunner {
@@ -61,6 +62,8 @@ public class HomeAutomationApplication implements CommandLineRunner {
         System.setProperty("darksky.apiKey", "8fc2bca342596e1a7d9470fbdfd0583f");
 
         TellstickHazelcastClusterNode.setSystemIpProperty();
+
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
         SpringApplication.run(HomeAutomationApplication.class, args);
     }
 }
