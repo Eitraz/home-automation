@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TestDevice extends TellstickHazelcastClusterDevice {
+public class LivingRoomTvBackLight extends TellstickHazelcastClusterDevice {
     @Autowired
-    public TestDevice(TellstickHazelcastCluster cluster) {
-        super(cluster, "TestDevice");
+    public LivingRoomTvBackLight(TellstickHazelcastCluster cluster) {
+        super(cluster, "LivingRoomTvBackLight");
     }
 }

@@ -2,6 +2,7 @@ package com.eitraz.automation;
 
 import com.eitraz.automation.device.*;
 import com.eitraz.automation.ip.LivingRoomTv;
+import com.eitraz.automation.ip.NetworkDevice;
 import com.eitraz.automation.remote.RemoteController1Unit1;
 import com.eitraz.automation.remote.RemoteController1Unit2;
 import com.eitraz.automation.sensor.*;
@@ -53,8 +54,15 @@ public class DeviceAutomation {
     @Autowired
     private ApplicationContext context;
 
+    @SuppressWarnings("UnusedParameters")
     @EventListener
     public void handleSensorUpdate(AbstractRawDevice sensor) {
+        update();
+    }
+
+    @SuppressWarnings("UnusedParameters")
+    @EventListener
+    public void handleNetworkDeviceUpdate(NetworkDevice device) {
         update();
     }
 
@@ -96,6 +104,12 @@ public class DeviceAutomation {
                     setOn(PlayRoomWindow.class, isOn);
                 });
 
+        // TV back light
+        decision(() -> remote1ForceOn)
+                .or(() -> !remote1ForceOff)
+                .and(() -> forecast.sunIsDown())
+                .and(() -> livingRoomTv.isOn())
+                .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
 
         final boolean remote2ForceOn = remoteController1Unit2.isOn().orElse(false);
         final boolean remote2ForceOff = remoteController1Unit2.isOff().orElse(false);
@@ -111,19 +125,15 @@ public class DeviceAutomation {
                 .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
-                .then(isOn -> {
-                    setOn(UpstairsHallway.class, isOn);
-                });
+                .then(isOn -> setOn(UpstairsHallway.class, isOn));
 
         // Kids room
         decision(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("08:30", "11:01") || timeIsBetween("10:59", "18:00"))
-                .and(() -> upstairsMotionSensor.isActive() ||
-                        upstairsHallwayMotionSensor.isActive()
+                .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
+                        upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
-                .then(isOn -> {
-                    setOn(KidsRoomWindow.class, isOn);
-                });
+                .then(isOn -> setOn(KidsRoomWindow.class, isOn));
 
         // Stair window
         decision(() -> remote1ForceOn || remote2ForceOn)
@@ -134,9 +144,7 @@ public class DeviceAutomation {
                         upstairsHallwayMotionSensor.isActive() ||
                         entranceMotionSensor.isActive()
                 )
-                .then(isOn -> {
-                    setOn(StairWindow.class, isOn);
-                });
+                .then(isOn -> setOn(StairWindow.class, isOn));
 
         // Bedroom
         decision(() -> remote1ForceOn || remote2ForceOn)
@@ -150,9 +158,7 @@ public class DeviceAutomation {
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(30)) ||
                         (timeIsBetween("06:30", "08:00") && LocalDate.now().getDayOfWeek().getValue() < 6)
                 )
-                .then(isOn -> {
-                    setOn(BedroomWindow.class, isOn);
-                });
+                .then(isOn -> setOn(BedroomWindow.class, isOn));
     }
 
     private static boolean timeIsBetween(String start, String end) {
