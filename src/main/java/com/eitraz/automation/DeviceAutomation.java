@@ -129,7 +129,7 @@ public class DeviceAutomation {
 
         // Kids room
         decision(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("08:30", "11:01") || timeIsBetween("10:59", "18:00"))
+                .and(() -> timeIsBetween("08:00", "11:01") || timeIsBetween("10:59", "18:00"))
                 .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
