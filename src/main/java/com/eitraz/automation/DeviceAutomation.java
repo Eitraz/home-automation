@@ -8,6 +8,8 @@ import com.eitraz.automation.remote.RemoteUpstairs;
 import com.eitraz.automation.sensor.*;
 import com.eitraz.automation.tool.Forecast;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterDevice;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
@@ -24,6 +26,8 @@ import static java.time.LocalTime.now;
 @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
 @Component
 public class DeviceAutomation {
+    private static final Logger logger = LogManager.getLogger();
+
     @Autowired
     private RemoteDownstairs remoteDownstairs;
 
@@ -69,6 +73,8 @@ public class DeviceAutomation {
     private synchronized void update() {
         final boolean remoteDownstairsOn = this.remoteDownstairs.isOn().orElse(false);
         final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
+
+        logger.info("Remote Downstairs, ON: " + remoteDownstairsOn + ", OFF: " + remoteDownstairsOff);
 
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())

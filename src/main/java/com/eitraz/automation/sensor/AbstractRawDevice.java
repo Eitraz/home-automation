@@ -24,7 +24,7 @@ public abstract class AbstractRawDevice {
     public void handle(RawDeviceEvent event) {
         if (matches(event)) {
             // No need to run to often
-            if (lastEventTime != null && lastEventTime.plus(Duration.ofSeconds(5)).isAfter(LocalDateTime.now()))
+            if (lastEventTime != null && lastEventTime.plus(Duration.ofSeconds(1)).isAfter(LocalDateTime.now()))
                 return;
 
             logger.info("RawDevice: " + getClass().getSimpleName() + ", event: " + event);
