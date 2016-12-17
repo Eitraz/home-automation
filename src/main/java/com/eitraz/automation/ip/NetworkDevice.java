@@ -1,5 +1,7 @@
 package com.eitraz.automation.ip;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -12,6 +14,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public abstract class NetworkDevice {
+    private static final Logger logger = LogManager.getLogger();
+
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     private LocalDateTime lastChange = LocalDateTime.now();
@@ -25,6 +29,7 @@ public abstract class NetworkDevice {
         executor.scheduleAtFixedRate(() -> {
             boolean reachable = isReachable(ip);
             if (reachable != isOn) {
+                logger.info("NetworkDevice '{}' ({}) is on: {}", getClass().getSimpleName(), ip, reachable);
                 lastChange = LocalDateTime.now();
                 isOn = reachable;
                 publisher.publishEvent(this);

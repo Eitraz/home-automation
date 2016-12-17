@@ -74,8 +74,6 @@ public class DeviceAutomation {
         final boolean remoteDownstairsOn = this.remoteDownstairs.isOn().orElse(false);
         final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
 
-        logger.info("Remote Downstairs, ON: " + remoteDownstairsOn + ", OFF: " + remoteDownstairsOff);
-
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
