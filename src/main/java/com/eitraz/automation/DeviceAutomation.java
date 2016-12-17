@@ -10,6 +10,8 @@ import com.eitraz.automation.remote.WallRemoteUnit12;
 import com.eitraz.automation.sensor.*;
 import com.eitraz.automation.tool.Forecast;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterDevice;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
@@ -26,6 +28,8 @@ import static java.time.LocalTime.now;
 @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
 @Component
 public class DeviceAutomation {
+    private static final Logger logger = LogManager.getLogger();
+
     @Autowired
     private RemoteController1Unit1 remoteController1Unit1;
 
@@ -80,6 +84,9 @@ public class DeviceAutomation {
 
         final boolean wallRemote11ForceOn = wallRemoteUnit11.isOn().orElse(false);
         final boolean wallRemote11ForceOff = wallRemoteUnit11.isOff().orElse(false);
+
+        logger.info("remote1ForceOn: " + remote1ForceOn);
+        logger.info("remote1ForceOff: " + remote1ForceOff);
 
         decision(() -> remote1ForceOn || wallRemote11ForceOn)
                 .or(() -> !remote1ForceOff && !wallRemote11ForceOff)

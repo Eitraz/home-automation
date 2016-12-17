@@ -17,10 +17,12 @@ public class DecisionTest {
         assertTrue(decision(FALSE).or(TRUE).isTrue());
         assertTrue(decision(TRUE).or(FALSE).isTrue());
         assertTrue(decision(FALSE).and(FALSE).or(TRUE).and(TRUE).isTrue());
+        assertTrue(decision(FALSE).or(TRUE).and(TRUE).isTrue());
 
         assertFalse(decision(TRUE).and(FALSE).isTrue());
         assertFalse(decision(FALSE).or(FALSE).isTrue());
         assertFalse(decision(FALSE).and(FALSE).or(TRUE).and(FALSE).isTrue());
+        assertFalse(decision(FALSE).or(TRUE).and(FALSE).isTrue());
 
         assertTrue(decision(FALSE).and(FALSE).or(FALSE).and(FALSE).or(TRUE).isTrue());
         assertTrue(decision(TRUE).or(FALSE).or(FALSE).isTrue());
