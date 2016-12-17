@@ -17,8 +17,8 @@ public abstract class AbstractRawDevice {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    private RawDeviceEvent lastEvent;
-    private LocalDateTime lastEventTime;
+    protected RawDeviceEvent lastEvent;
+    protected LocalDateTime lastEventTime;
 
     @EventListener
     public void handle(RawDeviceEvent event) {
@@ -29,10 +29,14 @@ public abstract class AbstractRawDevice {
 
             logger.info("RawDevice: " + getClass().getSimpleName() + ", event: " + event);
 
-            lastEvent = event;
-            lastEventTime = LocalDateTime.now();
+            setEvent(event);
             publisher.publishEvent(this);
         }
+    }
+
+    protected void setEvent(RawDeviceEvent event) {
+        lastEvent = event;
+        lastEventTime = LocalDateTime.now();
     }
 
     public RawDeviceEvent getLastEvent() {
