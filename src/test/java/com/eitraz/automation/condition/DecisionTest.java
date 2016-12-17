@@ -23,8 +23,9 @@ public class DecisionTest {
         assertFalse(decision(FALSE).or(FALSE).isTrue());
         assertFalse(decision(FALSE).and(FALSE).or(TRUE).and(FALSE).isTrue());
         assertFalse(decision(FALSE).or(TRUE).and(FALSE).isTrue());
+        assertFalse(decision(TRUE).or(FALSE).and(FALSE).isTrue());
 
-        assertTrue(decision(FALSE).and(FALSE).or(FALSE).and(FALSE).or(TRUE).isTrue());
+        assertTrue(decision(FALSE).and(FALSE).or(FALSE).and(FALSE).or(TRUE).and(TRUE).isTrue());
         assertTrue(decision(TRUE).or(FALSE).or(FALSE).isTrue());
     }
 }
