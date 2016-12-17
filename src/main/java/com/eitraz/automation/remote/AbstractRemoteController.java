@@ -16,7 +16,7 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
     }
 
     public Optional<Boolean> isOn(Duration timeout) {
-        if (getLastEventTime() != null && getLastEventTime().plus(timeout).isAfter(LocalDateTime.now()) &&
+        if (getLastEventTime() != null && getLastEvent() != null && getLastEventTime().plus(timeout).isAfter(LocalDateTime.now()) &&
                 TURNON.equals(getMethod(getLastEvent())))
             return Optional.of(true);
         return Optional.empty();
@@ -27,7 +27,7 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
     }
 
     public Optional<Boolean> isOff(Duration timeout) {
-        if (getLastEventTime() != null && getLastEventTime().plus(timeout).isAfter(LocalDateTime.now()) &&
+        if (getLastEventTime() != null && getLastEvent() != null && getLastEventTime().plus(timeout).isAfter(LocalDateTime.now()) &&
                 TURNOFF.equals(getMethod(getLastEvent())))
             return Optional.of(true);
         return Optional.empty();
@@ -40,10 +40,10 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
     @Override
     protected void setEvent(RawDeviceEvent event) {
         // Same method is called again, after at least one minute
-        if (getLastEventTime() != null &&
+        if (getLastEventTime() != null && getLastEvent() != null &&
                 getLastEventTime().plus(Duration.ofMinutes(1)).isBefore(LocalDateTime.now()) &&
                 getMethod(getLastEvent()).equals(getMethod(event))) {
-            lastEventTime = null;
+            lastEventTime = LocalDateTime.now();
             lastEvent = null;
         }
         // Use default behaviour
