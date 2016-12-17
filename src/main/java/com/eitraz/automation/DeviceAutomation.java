@@ -110,9 +110,8 @@ public class DeviceAutomation {
 
         // TV back light
         decision(() -> !remoteDownstairsOff)
-                .and(() -> forecast.sunIsDown())
-                .and(() -> livingRoomTv.isOn())
-                .or(() -> remoteDownstairsOn)
+                .and(() -> forecast.sunIsDown() || remoteDownstairsOn)
+                .and(() -> livingRoomTv.isOn() || remoteDownstairsOn)
                 .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
 
         final boolean remoteUpstairsOn = remoteUpstairs.isOn().orElse(false);

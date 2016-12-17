@@ -39,15 +39,12 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
 
     @Override
     protected void setEvent(RawDeviceEvent event) {
-        if (lastEventTime != null && lastEventTime.plus(Duration.ofSeconds(15)).isAfter(LocalDateTime.now()))
-            return;
-
         // Same method is called again, after at least one minute
-        if (getLastEventTime() != null && getLastEvent() != null &&
-                getLastEventTime().plus(Duration.ofMinutes(1)).isBefore(LocalDateTime.now()) &&
-                getMethod(getLastEvent()).equals(getMethod(event))) {
-            lastEventTime = LocalDateTime.now();
-            lastEvent = null;
+        if (getLastEventTime() != null && getLastEvent() != null && getMethod(getLastEvent()).equals(getMethod(event))) {
+            if (getLastEventTime().plus(Duration.ofMinutes(1)).isBefore(LocalDateTime.now())) {
+                lastEventTime = LocalDateTime.now();
+                lastEvent = null;
+            }
         }
         // Use default behaviour
         else {
