@@ -11,6 +11,8 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
     public static final String TURNON = "turnon";
     public static final String TURNOFF = "turnoff";
 
+    private RawDeviceEvent localLastEvent = null;
+
     public Optional<Boolean> isOn() {
         return isOn(Duration.ofHours(5));
     }
@@ -40,7 +42,7 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
     @Override
     protected void setEvent(RawDeviceEvent event) {
         // Same method is called again, after at least one minute
-        if (getLastEventTime() != null && getLastEvent() != null && getMethod(getLastEvent()).equals(getMethod(event))) {
+        if (getLastEventTime() != null && localLastEvent != null && getMethod(localLastEvent).equals(getMethod(event))) {
             if (getLastEventTime().plus(Duration.ofMinutes(1)).isBefore(LocalDateTime.now())) {
                 lastEventTime = LocalDateTime.now();
                 lastEvent = null;
@@ -50,5 +52,7 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
         else {
             super.setEvent(event);
         }
+
+        localLastEvent = event;
     }
 }
