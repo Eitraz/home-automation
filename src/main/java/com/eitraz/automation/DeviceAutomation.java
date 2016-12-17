@@ -67,10 +67,10 @@ public class DeviceAutomation {
     }
 
     private synchronized void update() {
-        final boolean wallRemote11ForceOn = remoteDownstairs.isOn().orElse(false);
-        final boolean wallRemote11ForceOff = remoteDownstairs.isOff().orElse(false);
+        final boolean remoteDownstairsOn = this.remoteDownstairs.isOn().orElse(false);
+        final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
 
-        decision(() -> !wallRemote11ForceOff)
+        decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
                 .and(() -> livingRoomTv.isOn() ||
@@ -81,14 +81,14 @@ public class DeviceAutomation {
                         timeIsBetween("07:30", "08:30") ||
                         timeIsBetween("16:30", "22:00")
                 )
-                .or(() -> wallRemote11ForceOn)
+                .or(() -> remoteDownstairsOn)
                 .then(isOn -> {
                     setOn(LivingRoomWindow.class, isOn);
                     setOn(EntranceWindow.class, isOn);
                     setOn(Garden.class, isOn);
                 });
 
-        decision(() -> !wallRemote11ForceOff)
+        decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
                 .and(() -> livingRoomTv.isOn() ||
@@ -96,7 +96,7 @@ public class DeviceAutomation {
                         entranceMotionSensor.isActive() ||
                         kitchenMotionSensor.isActive()
                 )
-                .or(() -> wallRemote11ForceOn)
+                .or(() -> remoteDownstairsOn)
                 .then(isOn -> {
                     setOn(KitchenWindow.class, isOn);
                     setOn(GuestRoomWindow.class, isOn);
@@ -105,17 +105,17 @@ public class DeviceAutomation {
                 });
 
         // TV back light
-        decision(() -> !wallRemote11ForceOff)
+        decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> livingRoomTv.isOn())
-                .or(() -> wallRemote11ForceOn)
+                .or(() -> remoteDownstairsOn)
                 .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
 
-        final boolean wallRemote12ForceOn = remoteUpstairs.isOn().orElse(false);
-        final boolean wallRemote12ForceOff = remoteUpstairs.isOff().orElse(false);
+        final boolean remoteUpstairsOn = remoteUpstairs.isOn().orElse(false);
+        final boolean remoteUpstairsOff = remoteUpstairs.isOff().orElse(false);
 
         // Upstairs hallway
-        decision(() -> !wallRemote12ForceOff)
+        decision(() -> !remoteUpstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> (timeIsBetween("6:45", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
@@ -124,7 +124,7 @@ public class DeviceAutomation {
                 .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
-                .or(() -> wallRemote12ForceOn)
+                .or(() -> remoteUpstairsOn)
                 .then(isOn -> setOn(UpstairsHallway.class, isOn));
 
         // Kids room
@@ -136,18 +136,18 @@ public class DeviceAutomation {
                 .then(isOn -> setOn(KidsRoomWindow.class, isOn));
 
         // Stair window
-        decision(() -> !wallRemote12ForceOff)
+        decision(() -> !remoteUpstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30"))
                 .and(() -> upstairsMotionSensor.isActive() ||
                         upstairsHallwayMotionSensor.isActive() ||
                         entranceMotionSensor.isActive()
                 )
-                .or(() -> wallRemote11ForceOn || wallRemote12ForceOn)
+                .or(() -> remoteDownstairsOn || remoteUpstairsOn)
                 .then(isOn -> setOn(StairWindow.class, isOn));
 
         // Bedroom
-        decision(() -> !wallRemote12ForceOff)
+        decision(() -> !remoteUpstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> (timeIsBetween("6:30", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
@@ -157,7 +157,7 @@ public class DeviceAutomation {
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(30)) ||
                         (timeIsBetween("06:30", "08:00") && LocalDate.now().getDayOfWeek().getValue() < 6)
                 )
-                .or(() -> wallRemote11ForceOn || wallRemote12ForceOn)
+                .or(() -> remoteUpstairsOn)
                 .then(isOn -> setOn(BedroomWindow.class, isOn));
     }
 
