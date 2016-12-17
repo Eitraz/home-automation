@@ -18,7 +18,7 @@ public abstract class NetworkDevice {
 
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-    private LocalDateTime lastChange = LocalDateTime.now();
+    private LocalDateTime lastChange = LocalDateTime.now().minus(Duration.ofMinutes(30));
     private boolean isOn = false;
 
     @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
