@@ -3,22 +3,23 @@ package com.eitraz.automation;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastCluster;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastClusterNode;
 import com.hazelcast.config.Config;
-import com.hazelcast.config.ManagementCenterConfig;
-import com.hazelcast.config.MulticastConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
+import javax.sql.DataSource;
 import java.time.Duration;
-import java.util.Collections;
-import java.util.TimeZone;
 
+@Profile("production")
 @SpringBootApplication
 public class HomeAutomationApplication implements CommandLineRunner {
     private final ApplicationEventPublisher publisher;
@@ -28,7 +29,7 @@ public class HomeAutomationApplication implements CommandLineRunner {
         this.publisher = publisher;
     }
 
-    @Bean(name = "hazelcast")
+    @Bean
     public HazelcastInstance hazelcast() {
         Config config = new Config();
         config.setProperty("hazelcast.local.localAddress", System.getProperty("ip"));
@@ -41,7 +42,7 @@ public class HomeAutomationApplication implements CommandLineRunner {
         return Hazelcast.newHazelcastInstance(config);
     }
 
-    @Bean(name = "tellstickHazelcastCluster")
+    @Bean
     @Autowired
     public TellstickHazelcastCluster tellstickHazelcastCluster(HazelcastInstance hazelcast) {
         TellstickHazelcastCluster tellstick = new TellstickHazelcastCluster(hazelcast, Duration.ofSeconds(2));
@@ -52,18 +53,27 @@ public class HomeAutomationApplication implements CommandLineRunner {
         return tellstick;
     }
 
+    @Bean
+    public DataSource mysqlDatasource(@Value("${database.host}") String host,
+                                      @Value("${database.port}") int port,
+                                      @Value("${database.user}") String user,
+                                      @Value("${database.password}") String password) {
+        MysqlDataSource mysql = new MysqlDataSource();
+        mysql.setServerName(host);
+        mysql.setPort(port);
+        mysql.setUser(user);
+        mysql.setPassword(password);
+        return mysql;
+    }
+
     @Override
     public void run(String... strings) throws Exception {
-        // TODO: Keep it going
     }
 
     public static void main(String[] args) {
-        // TODO: Remove
-        System.setProperty("darksky.apiKey", "8fc2bca342596e1a7d9470fbdfd0583f");
-
         TellstickHazelcastClusterNode.setSystemIpProperty();
 
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
+        //TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
         SpringApplication.run(HomeAutomationApplication.class, args);
     }
 }

@@ -1,5 +1,6 @@
 package com.eitraz.automation.tool;
 
+import com.eitraz.automation.HomeAutomationTestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,8 @@ import java.time.Month;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("SpringJavaAutowiredMembersInspection")
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {HomeAutomationTestApplication.class})
 public class ForecastTest {
     @Autowired
     private Forecast forecast;
