@@ -45,7 +45,7 @@ public abstract class AbstractRemoteController extends AbstractRawDevice {
         if (getLastEventTime() != null && localLastEvent != null && getMethod(localLastEvent).equals(getMethod(event))) {
             if (getLastEventTime().plus(Duration.ofMinutes(1)).isBefore(LocalDateTime.now())) {
                 lastEventTime = LocalDateTime.now();
-                lastEvent = null;
+                lastEvent = lastEvent == null ? event : null;
             }
         }
         // Use default behaviour
