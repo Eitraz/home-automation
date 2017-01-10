@@ -121,6 +121,7 @@ public class DeviceAutomation {
         // Office Vitrine
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
+                .and(() -> timeIsBetween("18:30", "23:59"))
                 .and(() -> petterPC.isOn() || ankiPC.isOn())
                 .or(() -> remoteDownstairsOn)
                 .then(isOn -> setOn(OfficeVitrine.class, isOn));
