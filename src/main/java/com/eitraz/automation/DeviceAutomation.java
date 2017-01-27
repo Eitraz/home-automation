@@ -119,18 +119,18 @@ public class DeviceAutomation {
 
 
         // Office Vitrine
-        decision(() -> !remoteDownstairsOff)
-                .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("18:30", "23:59"))
-                .and(() -> petterPC.isOn() || ankiPC.isOn())
-                .or(() -> remoteDownstairsOn)
-                .then(isOn -> setOn(OfficeVitrine.class, isOn));
+//        decision(() -> !remoteDownstairsOff)
+//                .and(() -> forecast.sunIsDown())
+//                .and(() -> timeIsBetween("18:30", "23:59"))
+//                .and(() -> petterPC.isOn() || ankiPC.isOn())
+//                .or(() -> remoteDownstairsOn)
+//                .then(isOn -> setOn(OfficeVitrine.class, isOn));
 
         // Linns room
         decision(() -> forecast.sunIsDown())
                 .and(() -> (timeIsBetween("6:45", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
-                        || timeIsBetween("10:59", "18:15")
+                        || timeIsBetween("10:59", "19:00")
                 )
                 .and(() -> livingRoomTv.isOn() ||
                         livingRoomMotionSensor.isActive() ||
