@@ -1,8 +1,10 @@
 package com.eitraz.automation;
 
 import com.eitraz.automation.device.*;
+import com.eitraz.automation.ip.AnkiPC;
 import com.eitraz.automation.ip.LivingRoomTv;
 import com.eitraz.automation.ip.NetworkDevice;
+import com.eitraz.automation.ip.PetterPC;
 import com.eitraz.automation.remote.RemoteDownstairs;
 import com.eitraz.automation.remote.RemoteUpstairs;
 import com.eitraz.automation.sensor.*;
@@ -41,6 +43,12 @@ public class DeviceAutomation {
     private LivingRoomTv livingRoomTv;
 
     @Autowired
+    private PetterPC petterPC;
+
+    @Autowired
+    private AnkiPC ankiPC;
+
+    @Autowired
     private LivingRoomMotionSensor livingRoomMotionSensor;
 
     @Autowired
@@ -74,10 +82,12 @@ public class DeviceAutomation {
         final boolean remoteDownstairsOn = this.remoteDownstairs.isOn().orElse(false);
         final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
 
+        boolean ipDeviceIsOn = livingRoomTv.isOn() || petterPC.isOn() || ankiPC.isOn();
+
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
-                .and(() -> livingRoomTv.isOn() ||
+                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || ipDeviceIsOn)
+                .and(() -> ipDeviceIsOn ||
                         livingRoomMotionSensor.isActive() ||
                         entranceMotionSensor.isActive() ||
                         kitchenMotionSensor.isActive() ||
@@ -94,8 +104,8 @@ public class DeviceAutomation {
 
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || livingRoomTv.isOn())
-                .and(() -> livingRoomTv.isOn() ||
+                .and(() -> timeIsBetween("6:00", "11:01") || timeIsBetween("10:59", "22:30") || ipDeviceIsOn)
+                .and(() -> ipDeviceIsOn ||
                         livingRoomMotionSensor.isActive() ||
                         entranceMotionSensor.isActive() ||
                         kitchenMotionSensor.isActive()
@@ -103,10 +113,31 @@ public class DeviceAutomation {
                 .or(() -> remoteDownstairsOn)
                 .then(isOn -> {
                     setOn(KitchenWindow.class, isOn);
-                    setOn(GuestRoomWindow.class, isOn);
                     setOn(OfficeWindow.class, isOn);
                     setOn(PlayRoomWindow.class, isOn);
                 });
+
+
+        // Office Vitrine
+//        decision(() -> !remoteDownstairsOff)
+//                .and(() -> forecast.sunIsDown())
+//                .and(() -> timeIsBetween("18:30", "23:59"))
+//                .and(() -> petterPC.isOn() || ankiPC.isOn())
+//                .or(() -> remoteDownstairsOn)
+//                .then(isOn -> setOn(OfficeVitrine.class, isOn));
+
+        // Linns room
+        decision(() -> forecast.sunIsDown())
+                .and(() -> (timeIsBetween("6:45", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
+                        (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
+                        || timeIsBetween("10:59", "19:00")
+                )
+                .and(() -> livingRoomTv.isOn() ||
+                        livingRoomMotionSensor.isActive() ||
+                        entranceMotionSensor.isActive() ||
+                        kitchenMotionSensor.isActive()
+                )
+                .then(isOn -> setOn(LinnRoomWindow.class, isOn));
 
         // TV back light
         decision(() -> !remoteDownstairsOff)
@@ -137,7 +168,7 @@ public class DeviceAutomation {
                 .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
-                .then(isOn -> setOn(KidsRoomWindow.class, isOn));
+                .then(isOn -> setOn(IsakRoomWindow.class, isOn));
 
         // Stair window
         decision(() -> !remoteUpstairsOff)
