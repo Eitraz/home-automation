@@ -4,6 +4,7 @@ package com.eitraz.automation;
 import com.eitraz.tellstick.hazelcast.TellstickHazelcastCluster;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.test.TestHazelcastInstanceFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
 import java.time.Duration;
@@ -47,5 +49,13 @@ public class HomeAutomationTestApplication {
                 .setType(EmbeddedDatabaseType.HSQL)
                 .addScript("temperature_humidity_log.sql")
                 .build();
+    }
+
+    @Bean
+    @Autowired
+    public SessionFactory sessionFactory(DataSource dataSource) {
+        LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
+        factory.setDataSource(dataSource);
+        return factory.getObject();
     }
 }

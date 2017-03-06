@@ -58,6 +58,20 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- JDBC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.2.7.Final</version>
+        </dependency>
+
         <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
