@@ -62,7 +62,7 @@ public class Forecast {
         LocalDateTime sunriseWithOffset = sunrise.plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(30);
         LocalDateTime sunsetWithOffset = sunset.minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(45);
 
-        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: ", sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover);
+        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}", sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover);
 
         return now.isBefore(sunriseWithOffset) || now.isAfter(sunsetWithOffset);
     }
