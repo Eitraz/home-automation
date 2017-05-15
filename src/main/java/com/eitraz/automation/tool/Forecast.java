@@ -54,15 +54,32 @@ public class Forecast {
         return forecast.get().getCurrently().getCloudCover();
     }
 
+    public double getPrecipitation() {
+        return forecast.get().getCurrently().getPrecipIntensity();
+    }
+
     public boolean sunIsDown() {
         LocalDateTime now = LocalDateTime.now();
         double cloudCover = getCloudCover();
+        double precipitation = getPrecipitation();
         LocalDateTime sunrise = getSunrise();
         LocalDateTime sunset = getSunset();
-        LocalDateTime sunriseWithOffset = sunrise.plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(30);
-        LocalDateTime sunsetWithOffset = sunset.minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(45);
 
-        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}", sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover);
+        int cloudCoverOffset = new Double(60 * cloudCover).intValue();
+        int precipitationOffset = new Double(60 * precipitation).intValue();
+
+        LocalDateTime sunriseWithOffset = sunrise
+                .plusMinutes(cloudCoverOffset)
+                .plusMinutes(precipitationOffset)
+                .plusMinutes(30);
+
+        LocalDateTime sunsetWithOffset = sunset
+                .minusMinutes(cloudCoverOffset)
+                .minusMinutes(precipitationOffset)
+                .minusMinutes(45);
+
+        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}, precipitation: {}",
+                sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover, precipitation);
 
         return now.isBefore(sunriseWithOffset) || now.isAfter(sunsetWithOffset);
     }
