@@ -1,6 +1,8 @@
 package com.eitraz.automation.tool;
 
 import com.eitraz.darksky.DarkSky;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import static java.time.Instant.ofEpochSecond;
 
 @Component
 public class Forecast {
+    private static final Logger logger = LogManager.getLogger();
+
     private Double latitude = 58.038844;
     private Double longitude = 14.959616;
 
@@ -53,10 +57,14 @@ public class Forecast {
     public boolean sunIsDown() {
         LocalDateTime now = LocalDateTime.now();
         double cloudCover = getCloudCover();
-        LocalDateTime sunrise = getSunrise().plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(30);
-        LocalDateTime sunset = getSunset().minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(45);
+        LocalDateTime sunrise = getSunrise();
+        LocalDateTime sunset = getSunset();
+        LocalDateTime sunriseWithOffset = sunrise.plusMinutes(new Double(60 * cloudCover).intValue()).plusMinutes(30);
+        LocalDateTime sunsetWithOffset = sunset.minusMinutes(new Double(60 * cloudCover).intValue()).minusMinutes(45);
 
-        return now.isBefore(sunrise) || now.isAfter(sunset);
+        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: ", sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover);
+
+        return now.isBefore(sunriseWithOffset) || now.isAfter(sunsetWithOffset);
     }
 
     public boolean sunIsUp() {
