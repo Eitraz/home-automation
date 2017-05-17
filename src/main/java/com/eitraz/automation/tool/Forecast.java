@@ -65,7 +65,7 @@ public class Forecast {
         LocalDateTime sunrise = getSunrise();
         LocalDateTime sunset = getSunset();
 
-        int cloudCoverOffset = new Double(60 * cloudCover).intValue();
+        int cloudCoverOffset = new Double(120 * cloudCover).intValue();
         int precipitationOffset = new Double(60 * precipitation).intValue();
 
         LocalDateTime sunriseWithOffset = sunrise
