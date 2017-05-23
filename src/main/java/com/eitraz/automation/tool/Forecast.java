@@ -69,7 +69,7 @@ public class Forecast {
         int precipitationOffset = new Double(60 * precipitation).intValue();
 
         double halfYear = 365d / 2d;
-        int monthOffset = new Double((halfYear - Math.abs(now.getDayOfYear() - halfYear)) * 45).intValue();
+        int monthOffset = new Double((halfYear - Math.abs(now.getDayOfYear() - halfYear)) / halfYear * 45).intValue();
 
         LocalDateTime sunriseWithOffset = sunrise
                 .plusMinutes(cloudCoverOffset)
@@ -83,8 +83,8 @@ public class Forecast {
                 .minusMinutes(monthOffset)
                 .minusMinutes(45);
 
-        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}, precipitation: {}",
-                sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover, precipitation);
+        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}, precipitation: {}, month offset: {}",
+                sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover, precipitation, monthOffset);
 
         return now.isBefore(sunriseWithOffset) || now.isAfter(sunsetWithOffset);
     }
