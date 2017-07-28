@@ -117,14 +117,16 @@ public class DeviceAutomation {
                     setOn(PlayRoomWindow.class, isOn);
                 });
 
-
         // Office Vitrine
-//        decision(() -> !remoteDownstairsOff)
-//                .and(() -> forecast.sunIsDown())
-//                .and(() -> timeIsBetween("18:30", "23:59"))
-//                .and(() -> petterPC.isOn() || ankiPC.isOn())
-//                .or(() -> remoteDownstairsOn)
-//                .then(isOn -> setOn(OfficeVitrine.class, isOn));
+        decision(() -> !remoteDownstairsOff)
+                .and(() -> forecast.sunIsDown())
+                .and(() -> timeIsBetween("13:00", "22:30") || ipDeviceIsOn)
+                .and(() -> ipDeviceIsOn ||
+                        livingRoomMotionSensor.isActive() ||
+                        kitchenMotionSensor.isActive()
+                )
+                .or(() -> remoteDownstairsOn)
+                .then(isOn -> setOn(OfficeVitrine.class, isOn));
 
         // Linns room
         decision(() -> forecast.sunIsDown())
