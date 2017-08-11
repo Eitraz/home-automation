@@ -31,7 +31,7 @@ public class PersistTemperatureAndHumidity {
     public void handleSensorUpdate(AbstractTemperatureAndHumiditySensor sensor) {
         TemperatureHumidityLogEntity entity = new TemperatureHumidityLogEntity();
         entity.setSensor(sensor.getClass().getSimpleName());
-        entity.setDatetime(new Timestamp(sensor.getLastEventTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+        entity.setDatetime(Timestamp.valueOf(sensor.getLastEventTime()));
         entity.setTemperature(new BigDecimal(sensor.getTemperature()));
         entity.setHumidity(new BigDecimal(sensor.getHumidity()));
 
