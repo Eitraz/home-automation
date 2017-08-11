@@ -1,5 +1,13 @@
 FROM ubuntu:16.04
 
+# Set timezone
+ENV TZ 'Europe/Stockholm'
+RUN echo $TZ > /etc/timezone && \
+    apt-get update && apt-get install -y tzdata && \
+    rm /etc/localtime && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 # Maven and GIT
 RUN apt-get update && apt-get install -y software-properties-common supervisor maven git
 
