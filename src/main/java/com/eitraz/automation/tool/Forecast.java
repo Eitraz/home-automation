@@ -83,7 +83,7 @@ public class Forecast {
                 .minusMinutes(monthOffset)
                 .minusMinutes(45);
 
-        logger.info("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}, precipitation: {}, month offset: {}",
+        logger.debug("Sunrise: {} ({}), sunset: {} ({}), cloud cover: {}, precipitation: {}, month offset: {}",
                 sunrise, sunriseWithOffset, sunset, sunsetWithOffset, cloudCover, precipitation, monthOffset);
 
         return now.isBefore(sunriseWithOffset) || now.isAfter(sunsetWithOffset);
