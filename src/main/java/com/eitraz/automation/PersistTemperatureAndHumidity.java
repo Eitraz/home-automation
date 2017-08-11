@@ -3,6 +3,8 @@ package com.eitraz.automation;
 import com.eitraz.automation.database.dao.TemperatureHumidityLogEntityDao;
 import com.eitraz.automation.database.model.TemperatureHumidityLogEntity;
 import com.eitraz.automation.sensor.AbstractTemperatureAndHumiditySensor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -13,6 +15,8 @@ import java.sql.Timestamp;
 
 @Component
 public class PersistTemperatureAndHumidity {
+    private static final Logger logger = LogManager.getLogger();
+
     private final TemperatureHumidityLogEntityDao dao;
 
     @Autowired
@@ -28,6 +32,11 @@ public class PersistTemperatureAndHumidity {
         entity.setDatetime(Timestamp.valueOf(sensor.getLastEventTime()));
         entity.setTemperature(new BigDecimal(sensor.getTemperature()));
         entity.setHumidity(new BigDecimal(sensor.getHumidity()));
+
+        logger.debug("Persisting entity: " + entity.getSensor() +
+                ", temperature: " + entity.getTemperature() +
+                ", humidity: " + entity.getHumidity() +
+                ", date/time: " + entity.getDatetime());
 
         dao.save(entity);
     }

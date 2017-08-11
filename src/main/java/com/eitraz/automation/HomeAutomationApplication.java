@@ -109,7 +109,7 @@ public class HomeAutomationApplication implements CommandLineRunner {
     public static void main(String[] args) {
         TellstickHazelcastClusterNode.setSystemIpProperty();
 
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
+        //TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
         SpringApplication.run(HomeAutomationApplication.class, args);
     }
 }
