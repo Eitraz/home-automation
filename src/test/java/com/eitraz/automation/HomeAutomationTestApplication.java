@@ -1,61 +1,49 @@
 package com.eitraz.automation;
 
 
-import com.eitraz.tellstick.hazelcast.TellstickHazelcastCluster;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.test.TestHazelcastInstanceFactory;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
-import java.time.Duration;
 
 @Profile("test")
 @SpringBootApplication
-public class HomeAutomationTestApplication {
+public class HomeAutomationTestApplication extends HomeAutomationApplication {
+    private final Environment environment;
     private final ApplicationEventPublisher publisher;
 
     @Autowired
-    public HomeAutomationTestApplication(ApplicationEventPublisher publisher) {
+    public HomeAutomationTestApplication(Environment environment, ApplicationEventPublisher publisher) {
+        super(environment, publisher);
+        this.environment = environment;
         this.publisher = publisher;
     }
 
+    @Override
     @Bean
     public HazelcastInstance hazelcast() {
         return new TestHazelcastInstanceFactory().newHazelcastInstance();
     }
 
+    @Override
     @Bean
-    @Autowired
-    public TellstickHazelcastCluster tellstickHazelcastCluster(HazelcastInstance hazelcastInstance) {
-        TellstickHazelcastCluster tellstick = new TellstickHazelcastCluster(hazelcastInstance, Duration.ofSeconds(2));
-
-        // Hand over raw events to Spring
-        tellstick.addRawDeviceEventListener(publisher::publishEvent);
-
-        return tellstick;
-    }
-
-    @Bean
-    public DataSource dataSource() {
+    public DataSource datasource(@Value("${database.driver}") String driverClassName,
+                                 @Value("${database.url}") String url,
+                                 @Value("${database.username}") String username,
+                                 @Value("${database.password}") String password) {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.HSQL)
                 .addScript("temperature_humidity_log.sql")
                 .build();
     }
 
-    @Bean
-    @Autowired
-    public SessionFactory sessionFactory(DataSource dataSource) {
-        LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
-        factory.setDataSource(dataSource);
-        return factory.getObject();
-    }
 }

@@ -5,10 +5,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
+@Transactional(readOnly = true)
 public class TemperatureHumidityLogEntityDaoImpl implements TemperatureHumidityLogEntityDao {
     private final SessionFactory sessionFactory;
 
@@ -17,24 +19,21 @@ public class TemperatureHumidityLogEntityDaoImpl implements TemperatureHumidityL
         this.sessionFactory = sessionFactory;
     }
 
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
     @Override
+    @Transactional
     public void save(TemperatureHumidityLogEntity entity) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(entity);
-        session.getTransaction().commit();
-        session.close();
+        getSession().save(entity);
     }
 
     @Override
     public List<TemperatureHumidityLogEntity> list() {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
-session.createQuery("select TemperatureHumidityLogEntity ");
-
-        session.getTransaction().commit();
-        session.close();
-        return null;
+        return getSession()
+                .createNamedQuery("temperature_humidity_log.list", TemperatureHumidityLogEntity.class)
+                .setMaxResults(100)
+                .getResultList();
     }
 }

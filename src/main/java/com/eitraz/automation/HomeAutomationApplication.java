@@ -6,8 +6,8 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -16,18 +16,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
 import java.time.Duration;
+import java.util.Properties;
 
 @Profile("production")
 @SpringBootApplication
 public class HomeAutomationApplication implements CommandLineRunner {
+    private final Environment environment;
     private final ApplicationEventPublisher publisher;
 
     @Autowired
-    public HomeAutomationApplication(ApplicationEventPublisher publisher) {
+    public HomeAutomationApplication(Environment environment, ApplicationEventPublisher publisher) {
+        this.environment = environment;
         this.publisher = publisher;
     }
 
@@ -56,24 +62,43 @@ public class HomeAutomationApplication implements CommandLineRunner {
     }
 
     @Bean
-    public DataSource mysqlDatasource(@Value("${database.host}") String host,
-                                      @Value("${database.port}") int port,
-                                      @Value("${database.user}") String user,
-                                      @Value("${database.password}") String password) {
-        MysqlDataSource mysql = new MysqlDataSource();
-        mysql.setServerName(host);
-        mysql.setPort(port);
-        mysql.setUser(user);
-        mysql.setPassword(password);
-        return mysql;
+    public DataSource datasource(@Value("${database.driver}") String driverClassName,
+                                 @Value("${database.url}") String url,
+                                 @Value("${database.username}") String username,
+                                 @Value("${database.password}") String password) {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        return dataSource;
     }
 
     @Bean
     @Autowired
-    public SessionFactory sessionFactory(DataSource dataSource) {
+    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
         factory.setDataSource(dataSource);
-        return factory.getObject();
+        factory.setPackagesToScan("com.eitraz.automation.database.model");
+        factory.setHibernateProperties(getHibernateProperties());
+        return factory;
+    }
+
+    private Properties getHibernateProperties() {
+        Properties properties = new Properties();
+        properties.put(AvailableSettings.DIALECT, environment.getRequiredProperty("hibernate.dialect"));
+        properties.put(AvailableSettings.SHOW_SQL, environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put(AvailableSettings.STATEMENT_BATCH_SIZE, environment.getRequiredProperty("hibernate.batch.size"));
+//        properties.put(AvailableSettings.HBM2DDL_AUTO, environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
+        properties.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, environment.getRequiredProperty("hibernate.current.session.context.class"));
+        return properties;
+    }
+
+    @Bean
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
     }
 
     @Override

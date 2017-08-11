@@ -6,6 +6,16 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "temperature_humidity_log")
+@NamedQueries({
+        @NamedQuery(
+                name = "temperature_humidity_log.mean_values_hour",
+                query = "SELECT sensor,avg(temperature) AS temperature,avg(humidity) AS humidity, min(datetime), hour(datetime) FROM TemperatureHumidityLogEntity t GROUP BY sensor,year(datetime),month(datetime),day(datetime),hour(datetime)"
+        ),
+        @NamedQuery(
+                name = "temperature_humidity_log.list",
+                query = "SELECT s FROM TemperatureHumidityLogEntity s ORDER BY s.datetime DESC"
+        )
+})
 public class TemperatureHumidityLogEntity {
     private String sensor;
     private BigDecimal temperature;
@@ -54,6 +64,7 @@ public class TemperatureHumidityLogEntity {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
