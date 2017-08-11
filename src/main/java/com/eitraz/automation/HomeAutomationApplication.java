@@ -24,6 +24,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import javax.sql.DataSource;
 import java.time.Duration;
 import java.util.Properties;
+import java.util.TimeZone;
 
 @Profile("production")
 @SpringBootApplication
@@ -108,7 +109,7 @@ public class HomeAutomationApplication implements CommandLineRunner {
     public static void main(String[] args) {
         TellstickHazelcastClusterNode.setSystemIpProperty();
 
-        //TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Stockholm"));
         SpringApplication.run(HomeAutomationApplication.class, args);
     }
 }
