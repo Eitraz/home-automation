@@ -9,11 +9,27 @@ import java.sql.Timestamp;
 @NamedQueries({
         @NamedQuery(
                 name = "temperature_humidity_log.mean_values_hour",
-                query = "SELECT sensor,avg(temperature) AS temperature,avg(humidity) AS humidity, min(datetime), hour(datetime) FROM TemperatureHumidityLogEntity t GROUP BY sensor,year(datetime),month(datetime),day(datetime),hour(datetime)"
+                query = "SELECT sensor,avg(temperature) AS temperature,avg(humidity) AS humidity, min(datetime), hour(datetime) FROM TemperatureHumidityLogEntity t GROUP BY sensor,year(datetime),month(datetime),day(datetime),hour(datetime) ORDER BY min(datetime) DESC"
         ),
         @NamedQuery(
                 name = "temperature_humidity_log.list",
                 query = "SELECT s FROM TemperatureHumidityLogEntity s ORDER BY s.datetime DESC"
+        ),
+        @NamedQuery(
+                name = "temperature_humidity_log.list_from_timestamp",
+                query = "SELECT s FROM TemperatureHumidityLogEntity s WHERE s.datetime >= :fromDateTime ORDER BY s.datetime DESC"
+        ),
+        @NamedQuery(
+                name = "temperature_humidity_log.last_entry",
+                query = "SELECT s FROM TemperatureHumidityLogEntity s WHERE s.sensor = :sensorName ORDER BY s.datetime DESC"
+        ),
+        @NamedQuery(
+                name = "temperature_humidity_log.sensor_names",
+                query = "SELECT DISTINCT s.sensor FROM TemperatureHumidityLogEntity s"
+        ),
+        @NamedQuery(
+                name ="temperature_humidity_log.last_entry_by_sensor",
+                query = "SELECT DISTINCT(s.sensor) AS sensor, s.id AS id, s.datetime AS datetime, s.temperature AS temperature, s.humidity AS humidity FROM TemperatureHumidityLogEntity s ORDER BY s.datetime DESC"
         )
 })
 public class TemperatureHumidityLogEntity {
