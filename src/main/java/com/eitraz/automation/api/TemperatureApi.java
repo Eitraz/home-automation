@@ -66,7 +66,6 @@ public class TemperatureApi {
             // Hour
             else if ("h".equalsIgnoreCase(type)) {
                 offsetMillis *= 60 * value;
-                //dateTimeGroupDividerMillis *= 60 / 4; // 15 min
             }
             // Day
             else if ("d".equalsIgnoreCase(type)) {
@@ -81,7 +80,7 @@ public class TemperatureApi {
                 offsetMillis *= 60 * 24 * 365 * value;
             }
 
-            dateTimeGroupDividerMillis = offsetMillis / (20-1);
+            dateTimeGroupDividerMillis = offsetMillis / (50-1);
         }
         // Invalid length
         else {
