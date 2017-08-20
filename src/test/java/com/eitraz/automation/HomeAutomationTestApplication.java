@@ -34,16 +34,16 @@ public class HomeAutomationTestApplication extends HomeAutomationApplication {
         return new TestHazelcastInstanceFactory().newHazelcastInstance();
     }
 
-    @Override
-    @Bean
-    public DataSource datasource(@Value("${database.driver}") String driverClassName,
-                                 @Value("${database.url}") String url,
-                                 @Value("${database.username}") String username,
-                                 @Value("${database.password}") String password) {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.HSQL)
-                .addScript("temperature_humidity_log.sql")
-                .build();
-    }
+//    @Override
+//    @Bean
+//    public DataSource datasource(@Value("${database.driver}") String driverClassName,
+//                                 @Value("${database.url}") String url,
+//                                 @Value("${database.username}") String username,
+//                                 @Value("${database.password}") String password) {
+//        return new EmbeddedDatabaseBuilder()
+//                .setType(EmbeddedDatabaseType.HSQL)
+//                .addScript("temperature_humidity_log.sql")
+//                .build();
+//    }
 
 }
