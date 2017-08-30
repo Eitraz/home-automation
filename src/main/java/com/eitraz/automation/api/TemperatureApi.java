@@ -87,35 +87,6 @@ public class TemperatureApi {
             throw new UnsupportedOperationException(String.format("Unsupported length '%s'", length));
         }
 
-        // 1h
-//        if ("1h".equalsIgnoreCase(length)) {
-//            offsetMillis *= 60;
-//        }
-//        // 12h
-//        else if ("12h".equalsIgnoreCase(length)) {
-//            offsetMillis *= 60 * 12;
-//            dateTimeGroupDividerMillis *= 60 / 4; // 15 min
-//        }
-//        // 24h
-//        else if ("24h".equalsIgnoreCase(length)) {
-//            offsetMillis *= 60 * 24;
-//            dateTimeGroupDividerMillis *= 60 / 2; // 30 min
-//        }
-//        // 7d
-//        else if ("7d".equalsIgnoreCase(length)) {
-//            offsetMillis *= 60 * 24 * 7;
-//            dateTimeGroupDividerMillis *= 60; // Hour
-//        }
-//        // 4w
-//        else if ("4w".equalsIgnoreCase(length)) {
-//            offsetMillis *= 60 * 24 * 7 * 4;
-//            dateTimeGroupDividerMillis *= 60 * 3; // 3 hours
-//        }
-//        // Unsupported
-//        else {
-//            throw new UnsupportedOperationException("Unsupported length");
-//        }
-
         List<TemperatureHumidityLogEntity> entries = dao.listFromDateTime(new Timestamp(System.currentTimeMillis() - offsetMillis));
 
         long finalDateTimeGroupDividerMillis = dateTimeGroupDividerMillis;

@@ -156,17 +156,17 @@ public class DeviceAutomation {
                 .and(() -> forecast.sunIsDown())
                 .and(() -> (timeIsBetween("6:45", "11:01") && LocalDate.now().getDayOfWeek().getValue() < 6) ||
                         (timeIsBetween("8:00", "11:01") && LocalDate.now().getDayOfWeek().getValue() >= 6)
-                        || timeIsBetween("10:59", "20:30")
+                        || timeIsBetween("10:59", "21:30")
                 )
-                .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
-                        upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
+                .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(60)) ||
+                        upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(60))
                 )
                 .or(() -> remoteUpstairsOn)
                 .then(isOn -> setOn(UpstairsHallway.class, isOn));
 
         // Kids room
         decision(() -> forecast.sunIsDown())
-                .and(() -> timeIsBetween("08:00", "11:01") || timeIsBetween("10:59", "18:00"))
+                .and(() -> timeIsBetween("08:00", "11:01") || timeIsBetween("10:59", "18:15"))
                 .and(() -> upstairsMotionSensor.isActive(Duration.ofMinutes(45)) ||
                         upstairsHallwayMotionSensor.isActive(Duration.ofMinutes(45))
                 )
