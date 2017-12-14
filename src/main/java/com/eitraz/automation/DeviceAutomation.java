@@ -17,9 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 
 import static com.eitraz.automation.condition.Decision.decision;
 import static java.lang.Integer.parseInt;
@@ -82,7 +80,28 @@ public class DeviceAutomation {
         final boolean remoteDownstairsOn = this.remoteDownstairs.isOn().orElse(false);
         final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
 
-        boolean ipDeviceIsOn = livingRoomTv.isOn() || petterPC.isOn() || ankiPC.isOn();
+        boolean specialOn = false;
+
+        // Christmas special
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Stockholm"));
+        if (now.getMonth().equals(Month.DECEMBER) && now.getDayOfMonth() >= 22 && now.getDayOfMonth() <= 25) {
+            if (timeIsBetween("07:00", "09:30") || timeIsBetween("15:30", "22:30")) {
+                specialOn = true;
+            }
+        }
+        // New years special
+        else if ((now.getMonth().equals(Month.DECEMBER) && now.getDayOfMonth() == 31)) {
+            if (timeIsBetween("15:30", "23:58")) {
+                specialOn = true;
+            }
+        }
+        else if (now.getMonth().equals(Month.JANUARY) && now.getDayOfMonth() == 1) {
+            if (timeIsBetween("00:02", "01:00")) {
+                specialOn = true;
+            }
+        }
+
+        boolean ipDeviceIsOn = livingRoomTv.isOn() || petterPC.isOn() || ankiPC.isOn() || specialOn;
 
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
