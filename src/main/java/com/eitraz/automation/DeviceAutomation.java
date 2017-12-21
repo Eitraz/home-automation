@@ -81,12 +81,21 @@ public class DeviceAutomation {
         final boolean remoteDownstairsOff = this.remoteDownstairs.isOff().orElse(false);
 
         boolean specialOn = false;
+        boolean forceTvBackLight = false;
 
         // Christmas special
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Stockholm"));
         if (now.getMonth().equals(Month.DECEMBER) && now.getDayOfMonth() >= 22 && now.getDayOfMonth() <= 25) {
             if (timeIsBetween("07:00", "09:30") || timeIsBetween("15:30", "22:30")) {
                 specialOn = true;
+            }
+
+            // TV back light
+            if (now.getDayOfMonth() == 24 && timeIsBetween("14:45", "15:45")) {
+                forceTvBackLight = true;
+            }
+            else if (timeIsBetween("19:30", "21:45")) {
+                forceTvBackLight = true;
             }
         }
         // New years special
@@ -102,6 +111,7 @@ public class DeviceAutomation {
         }
 
         boolean ipDeviceIsOn = livingRoomTv.isOn() || petterPC.isOn() || ankiPC.isOn() || specialOn;
+        boolean isForceTvBackLight = forceTvBackLight;
 
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
@@ -163,7 +173,7 @@ public class DeviceAutomation {
         // TV back light
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> livingRoomTv.isOn())
+                .and(() -> livingRoomTv.isOn() || isForceTvBackLight)
                 .or(() -> remoteDownstairsOn)
                 .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
 
