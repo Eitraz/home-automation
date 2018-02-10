@@ -173,7 +173,7 @@ public class DeviceAutomation {
         // TV back light
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
-                .and(() -> livingRoomTv.isOn() || isForceTvBackLight)
+                .and(() -> livingRoomTv.isOn() || livingRoomMotionSensor.isActive() || isForceTvBackLight)
                 .or(() -> remoteDownstairsOn)
                 .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
 
