@@ -171,11 +171,13 @@ public class DeviceAutomation {
                 .then(isOn -> setOn(LinnRoomWindow.class, isOn));
 
         // TV back light
+        /*
         decision(() -> !remoteDownstairsOff)
                 .and(() -> forecast.sunIsDown())
                 .and(() -> livingRoomTv.isOn() || livingRoomMotionSensor.isActive(Duration.ofMinutes(30)) || isForceTvBackLight)
                 .or(() -> remoteDownstairsOn)
                 .then(isOn -> setOn(LivingRoomTvBackLight.class, isOn));
+        */
 
         final boolean remoteUpstairsOn = remoteUpstairs.isOn().orElse(false);
         final boolean remoteUpstairsOff = remoteUpstairs.isOff().orElse(false);
